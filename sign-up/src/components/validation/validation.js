@@ -11,39 +11,24 @@ const validInputs = {
   )
 };
 
-const InitialsValidation = ({ value, name }) => {
+const initialsValidation = value => {
   const { validInitials } = validInputs;
   if (value) {
-    return validInitials.test(value) ? "" : <ErrorHandler name={name} />;
+    return validInitials.test(value);
   }
-  return value;
 };
-
-const EmailValidation = ({ value, name }) => {
+const emailValidation = value => {
   const { validEmail } = validInputs;
   if (value) {
-    return validEmail.test(value) ? "" : <ErrorHandler name={name} />;
+    return validEmail.test(value);
   }
-  return value;
 };
 
-const PasswordValidation = ({ value, name }) => {
+const passwordValidation = value => {
   const { validPassword } = validInputs;
   if (value) {
-    return validPassword.test(value) ? "" : <ErrorHandler name={name} />;
+    return validPassword.test(value);
   }
-  return value;
-};
-const PasswordConfirmation = ({ password, confirmation, name }) => {
-  if (password && confirmation) {
-    return password !== confirmation ? <ErrorHandler name={name} /> : null;
-  }
-  return confirmation;
 };
 
-export {
-  InitialsValidation,
-  EmailValidation,
-  PasswordValidation,
-  PasswordConfirmation
-};
+export { initialsValidation, emailValidation, passwordValidation };
