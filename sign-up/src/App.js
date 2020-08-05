@@ -10,11 +10,8 @@ import {
 } from "./components/validation/validation";
 import Input from "./components/input/input";
 
-let number = 100;
-
 const App = () => {
   const [user, setUser] = useState({
-    id: number++,
     firstName: "",
     lastName: "",
     email: "",
@@ -46,26 +43,8 @@ const App = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-
-    const userData = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: user.password
-    };
-
     axios
-      .post("http://localhost:5000/users", userData, {
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json"
-        }
-      })
-      .then(response => {
-        console.log(response);
-        console.log(response.data);
-      })
+      .post("http://localhost:5000/users", user)
       .catch(error => console.log(error));
     setSignedUp(true);
   };
