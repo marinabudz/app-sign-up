@@ -1,20 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.scss";
 import axios from "axios";
 import Sucess from "./components/sucess/sucess";
 import { ErrorHandler } from "./components/error/error";
+import { connect } from "react-redux";
 import {
   initialsValidation,
   emailValidation,
   passwordValidation
 } from "./components/validation/validation";
 import Input from "./components/input/input";
+import store from "./store/store";
 
-let number = 100;
+import {
+  userError,
+  emailError,
+  passwordError,
+  noEmailError,
+  noPasswordError,
+  noUserError,
+  submitForm,
+  userValues
+} from "./actions/actions";
 
-const App = () => {
+const App = ({ signedUp, error_user, error_email, error_password }) => {
+  //create user
   const [user, setUser] = useState({
-    id: number++,
     firstName: "",
     lastName: "",
     email: "",
@@ -22,64 +33,54 @@ const App = () => {
     confirmPassword: ""
   });
 
-  const [signedUp, setSignedUp] = useState(false);
-  const [error_user, setError_user] = useState(false);
-  const [error_email, setError_email] = useState(false);
-  const [error_password, setError_password] = useState(false);
-
+  // handle inputs & check for errors
   const handleInputChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUser({ ...user, [name]: value }, dispatch(userValues(user)));
     if (name === "firstName" || name === "lastName") {
-      initialsValidation(value) ? setError_user(false) : setError_user(true);
+      initialsValidation(value)
+        ? dispatch(noUserError())
+        : dispatch(userError());
     }
     if (name === "email") {
-      emailValidation(value) ? setError_email(false) : setError_email(true);
+      emailValidation(value)
+        ? dispatch(noEmailError())
+        : dispatch(emailError());
     }
     if (name === "password") {
       passwordValidation(value)
-        ? setError_password(false)
-        : setError_password(true);
+        ? dispatch(noPasswordError())
+        : dispatch(passwordError());
     }
   };
 
+  //submition of the form
   const onSubmit = e => {
     e.preventDefault();
-
-    const userData = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: user.password
-    };
-
+    dispatch(submitForm());
     axios
-      .post("http://localhost:5000/users", userData, {
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json"
-        }
-      })
-      .then(response => {
-        console.log(response);
-        console.log(response.data);
-      })
+      .post("http://localhost:5000/users", user)
       .catch(error => console.log(error));
-    setSignedUp(true);
   };
 
   const { firstName, lastName, email, password, confirmPassword } = user;
+  const { dispatch } = store;
 
-  const userError = error_user ? <ErrorHandler name="firstName" /> : null;
-  const emailError = error_email ? <ErrorHandler name="email" /> : null;
-  const passwordError = error_password ? (
+  //check global state if true return error component
+  const displayUserError = error_user ? (
+    <ErrorHandler name="firstName" />
+  ) : null;
+  const displayEmailError = error_email ? <ErrorHandler name="email" /> : null;
+  const displayPasswordError = error_password ? (
     <ErrorHandler name="password" />
   ) : null;
 
+  // check if password field === password confirmation  field
   const confirmation =
     confirmPassword !== password ? <ErrorHandler name="confirmation" /> : null;
+
+  //check for no errors and not empty inputs if true => unable button to submit form
   const disabled =
     error_user ||
     error_email ||
@@ -104,7 +105,7 @@ const App = () => {
           value={firstName}
           onChange={handleInputChange}
         />
-        {userError}
+        {displayUserError}
         <Input
           name="lastName"
           type="text"
@@ -112,7 +113,7 @@ const App = () => {
           value={lastName}
           onChange={handleInputChange}
         />
-        {userError}
+        {displayUserError}
         <Input
           name="email"
           type="email"
@@ -120,7 +121,7 @@ const App = () => {
           value={email}
           onChange={handleInputChange}
         />
-        {emailError}
+        {displayEmailError}
         <Input
           name="password"
           type="password"
@@ -128,7 +129,7 @@ const App = () => {
           value={password}
           onChange={handleInputChange}
         />
-        {passwordError}
+        {displayPasswordError}
         <Input
           name="confirmPassword"
           type="password"
@@ -137,8 +138,7 @@ const App = () => {
           onChange={handleInputChange}
         />
         {confirmation}
-
-        <button disabled={disabled} type="submit">
+        <button type="submit" disabled={disabled}>
           Submit
         </button>
       </form>
@@ -146,5 +146,31 @@ const App = () => {
   }
   return <Sucess name={firstName} lastName={lastName} />;
 };
-export default App;
+//get values from store
+const mapStateToProps = ({
+  signedUp,
+  error_user,
+  error_email,
+  error_password
+}) => {
+  return {
+    signedUp,
+    error_user,
+    error_email,
+    error_password
+  };
+};
+
+const mapDispatchToProps = {
+  userError,
+  emailError,
+  passwordError,
+  noEmailError,
+  noPasswordError,
+  noUserError,
+  submitForm,
+  userValues
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 // marinaBudz1!
