@@ -1,8 +1,8 @@
 //user  action creator
-const userValues = inputValues => {
+const userValues = (name, value) => {
   return {
     type: "SET_INPUT_VALUES",
-    payload: inputValues
+    payload: { [name]: value }
   };
 };
 //errors action creator
@@ -15,6 +15,7 @@ const noPasswordError = () => ({ type: "NO_PASSWORD_ERROR" });
 
 //sign up  action creator
 const submitForm = () => ({ type: "SUBMIT_FORM" });
+
 export {
   userError,
   emailError,
