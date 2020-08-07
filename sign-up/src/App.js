@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
+
 import "./App.scss";
+import axios from "axios";
 import Sucess from "./components/sucess/sucess";
 import { ErrorHandler } from "./components/error/error";
 import {
@@ -17,11 +20,12 @@ const App = () => {
     password: "",
     confirmPassword: ""
   });
+
+
   const [signedUp, setSignedUp] = useState(false);
   const [error_user, setError_user] = useState(false);
   const [error_email, setError_email] = useState(false);
   const [error_password, setError_password] = useState(false);
-
   const handleInputChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -38,8 +42,12 @@ const App = () => {
         : setError_password(true);
     }
   };
+
   const onSubmit = e => {
     e.preventDefault();
+    axios
+      .post("http://localhost:5000/users", user)
+      .catch(error => console.log(error));
     setSignedUp(true);
   };
 
@@ -120,3 +128,4 @@ const App = () => {
   return <Sucess name={firstName} lastName={lastName} />;
 };
 export default App;
+
