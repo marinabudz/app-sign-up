@@ -107,7 +107,7 @@ const App = ({ formValidation }) => {
           value={email}
           onChange={handleInputChange}
         />
-        {error_email && <ErrorHandler name="firstName" />}
+        {error_email && <ErrorHandler name="email" />}
         <Input
           name="password"
           type="password"
@@ -115,7 +115,7 @@ const App = ({ formValidation }) => {
           value={password}
           onChange={handleInputChange}
         />
-        {error_password && <ErrorHandler name="firstName" />}
+        {error_password && <ErrorHandler name="password" />}
         <Input
           name="confirmPassword"
           type="password"

@@ -1,3 +1,5 @@
+import { Map } from "immutable";
+
 const validationState = {
   signedUp: false,
   error_user: false,
@@ -7,9 +9,6 @@ const validationState = {
 
 const formValidationReducer = (state = validationState, action) => {
   switch (action.type) {
-    case "SET_INPUT_VALUES":
-      // return state.setIn(["userData", "userValues"], action.payload);
-      return { ...state, userValues: action.payload };
     case "SET_USER_ERROR":
       //return state.set(["userData", "error_user"], true);
       return { ...state, signedUp: false, error_user: true };
