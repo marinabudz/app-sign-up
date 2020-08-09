@@ -1,6 +1,3 @@
-import React from "react";
-import { ErrorHandler } from "../error/error";
-
 const validInputs = {
   validInitials: RegExp(/^[a-zA-Z]{3,100}/),
   validEmail: RegExp(

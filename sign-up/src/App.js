@@ -16,14 +16,17 @@ import {
   userError,
   emailError,
   passwordError,
+  noUserError,
   noEmailError,
   noPasswordError,
-  noUserError,
   submitForm,
-  userValues
+  userName,
+  userLastName,
+  userEmail,
+  userPassword
 } from "./actions/actions";
 
-const App = ({ signedUp, error_user, error_email, error_password }) => {
+const App = ({ formValidation }) => {
   //create user
   const [user, setUser] = useState({
     firstName: "",
@@ -32,25 +35,32 @@ const App = ({ signedUp, error_user, error_email, error_password }) => {
     password: "",
     confirmPassword: ""
   });
-
+  const { firstName, lastName, email, password, confirmPassword } = user;
+  const { signedUp, error_user, error_email, error_password } = formValidation;
+  const { dispatch } = store;
   // handle inputs & check for errors
   const handleInputChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value }, dispatch(userValues(user)));
-    if (name === "firstName" || name === "lastName") {
+    setUser({ ...user, [name]: value });
+    if (name === "firstName") {
       initialsValidation(value)
-        ? dispatch(noUserError())
+        ? dispatch(noUserError()) && dispatch(userName(value))
+        : dispatch(userError());
+    }
+    if (name === "lastName") {
+      initialsValidation(value)
+        ? dispatch(noUserError()) && dispatch(userLastName(value))
         : dispatch(userError());
     }
     if (name === "email") {
       emailValidation(value)
-        ? dispatch(noEmailError())
+        ? dispatch(noEmailError()) && dispatch(userEmail(value))
         : dispatch(emailError());
     }
     if (name === "password") {
       passwordValidation(value)
-        ? dispatch(noPasswordError())
+        ? dispatch(noPasswordError()) && dispatch(userPassword(value))
         : dispatch(passwordError());
     }
   };
@@ -64,35 +74,11 @@ const App = ({ signedUp, error_user, error_email, error_password }) => {
       .catch(error => console.log(error));
   };
 
-  const { firstName, lastName, email, password, confirmPassword } = user;
-  const { dispatch } = store;
-
-  //check global state if true return error component
-  const displayUserError = error_user ? (
-    <ErrorHandler name="firstName" />
-  ) : null;
-  const displayEmailError = error_email ? <ErrorHandler name="email" /> : null;
-  const displayPasswordError = error_password ? (
-    <ErrorHandler name="password" />
-  ) : null;
-
-  // check if password field === password confirmation  field
-  const confirmation =
-    confirmPassword !== password ? <ErrorHandler name="confirmation" /> : null;
-
   //check for no errors and not empty inputs if true => unable button to submit form
+  const validUser =
+    firstName && lastName && email && password && confirmPassword;
   const disabled =
-    error_user ||
-    error_email ||
-    error_password ||
-    confirmation ||
-    !firstName ||
-    !lastName ||
-    !email ||
-    !password ||
-    !confirmPassword
-      ? true
-      : false;
+    error_user || error_email || error_password || !validUser ? true : false;
 
   if (!signedUp) {
     return (
@@ -105,7 +91,7 @@ const App = ({ signedUp, error_user, error_email, error_password }) => {
           value={firstName}
           onChange={handleInputChange}
         />
-        {displayUserError}
+        {error_user && <ErrorHandler name="firstName" />}
         <Input
           name="lastName"
           type="text"
@@ -113,7 +99,7 @@ const App = ({ signedUp, error_user, error_email, error_password }) => {
           value={lastName}
           onChange={handleInputChange}
         />
-        {displayUserError}
+        {error_user && <ErrorHandler name="firstName" />}
         <Input
           name="email"
           type="email"
@@ -121,7 +107,7 @@ const App = ({ signedUp, error_user, error_email, error_password }) => {
           value={email}
           onChange={handleInputChange}
         />
-        {displayEmailError}
+        {error_email && <ErrorHandler name="firstName" />}
         <Input
           name="password"
           type="password"
@@ -129,7 +115,7 @@ const App = ({ signedUp, error_user, error_email, error_password }) => {
           value={password}
           onChange={handleInputChange}
         />
-        {displayPasswordError}
+        {error_password && <ErrorHandler name="firstName" />}
         <Input
           name="confirmPassword"
           type="password"
@@ -137,40 +123,31 @@ const App = ({ signedUp, error_user, error_email, error_password }) => {
           value={confirmPassword}
           onChange={handleInputChange}
         />
-        {confirmation}
+        {confirmPassword !== password && <ErrorHandler name="confirmation" />}
         <button type="submit" disabled={disabled}>
           Submit
         </button>
       </form>
     );
   }
-  return <Sucess name={firstName} lastName={lastName} />;
+  return <Sucess />;
 };
 //get values from store
-const mapStateToProps = ({
-  signedUp,
-  error_user,
-  error_email,
-  error_password
-}) => {
-  return {
-    signedUp,
-    error_user,
-    error_email,
-    error_password
-  };
+const mapStateToProps = ({ formValidation }) => {
+  return { formValidation };
 };
 
 const mapDispatchToProps = {
   userError,
   emailError,
   passwordError,
-  noEmailError,
-  noPasswordError,
   noUserError,
   submitForm,
-  userValues
+  noEmailError,
+  noPasswordError,
+  userName,
+  userLastName,
+  userEmail,
+  userPassword
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-// marinaBudz1!

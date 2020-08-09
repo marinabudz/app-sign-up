@@ -1,20 +1,11 @@
-// import Immutable from "immutable";
-// import CreateUserDTO from "../DTO/data-transfer-object";
-//const initialState = Immutable.Map({ userData: new CreateUserDTO() });
-const initialState = {
-  userValues: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  },
+const validationState = {
   signedUp: false,
   error_user: false,
   error_email: false,
   error_password: false
 };
-const reducer = (state = initialState, action) => {
+
+const formValidationReducer = (state = validationState, action) => {
   switch (action.type) {
     case "SET_INPUT_VALUES":
       // return state.setIn(["userData", "userValues"], action.payload);
@@ -44,5 +35,4 @@ const reducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export default reducer;
+export default formValidationReducer;

@@ -1,10 +1,15 @@
 //user  action creator
-const userValues = (name, value) => {
-  return {
-    type: "SET_INPUT_VALUES",
-    payload: { [name]: value }
-  };
-};
+const userName = name => ({ type: "SET_USER_NAME", payload: name });
+const userLastName = lastName => ({
+  type: "SET_USER_LAST_NAME",
+  payload: lastName
+});
+const userEmail = email => ({ type: "NO_USER_EMAIL", payload: email });
+const userPassword = password => ({
+  type: "SET_EMAIL_PASSWORD",
+  payload: password
+});
+
 //errors action creator
 const userError = () => ({ type: "SET_USER_ERROR" });
 const emailError = () => ({ type: "SET_EMAIL_ERROR" });
@@ -22,7 +27,10 @@ export {
   passwordError,
   noUserError,
   submitForm,
-  userValues,
   noEmailError,
-  noPasswordError
+  noPasswordError,
+  userName,
+  userLastName,
+  userEmail,
+  userPassword
 };
