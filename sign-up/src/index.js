@@ -4,9 +4,10 @@ import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store/store";
 
+import AppContainer from "./containers/App-Container";
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <AppContainer />
   </Provider>,
 
   document.getElementById("root")

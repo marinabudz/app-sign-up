@@ -1,13 +1,13 @@
 //user  action creator
-const userName = name => ({ type: "SET_USER_NAME", payload: name });
+const userName = firstName => ({ type: "SET_USER_NAME", firstName });
 const userLastName = lastName => ({
   type: "SET_USER_LAST_NAME",
-  payload: lastName
+  lastName
 });
-const userEmail = email => ({ type: "NO_USER_EMAIL", payload: email });
+const userEmail = email => ({ type: "SET_USER_EMAIL", email });
 const userPassword = password => ({
-  type: "SET_EMAIL_PASSWORD",
-  payload: password
+  type: "SET_USER_PASSWORD",
+  password
 });
 
 //errors action creator

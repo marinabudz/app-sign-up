@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import "./App.scss";
 import axios from "axios";
-import Sucess from "./components/sucess/sucess";
 import { ErrorHandler } from "./components/error/error";
-import { connect } from "react-redux";
-import {
-  initialsValidation,
-  emailValidation,
-  passwordValidation
-} from "./components/validation/validation";
+import { validation } from "./components/validation/validation";
 import Input from "./components/input/input";
 import store from "./store/store";
+import SucessContainer from "./containers/Sucess-Container";
 
-import {
+const App = ({
+  signedUp,
+  error_user,
+  error_email,
+  error_password,
   userError,
   emailError,
   passwordError,
@@ -24,10 +23,7 @@ import {
   userLastName,
   userEmail,
   userPassword
-} from "./actions/actions";
-
-const App = ({ formValidation }) => {
-  //create user
+}) => {
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -36,35 +32,32 @@ const App = ({ formValidation }) => {
     confirmPassword: ""
   });
   const { firstName, lastName, email, password, confirmPassword } = user;
-  const { signedUp, error_user, error_email, error_password } = formValidation;
   const { dispatch } = store;
   // handle inputs & check for errors
   const handleInputChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
+    validation("firstName");
     if (name === "firstName") {
-      initialsValidation(value)
-        ? dispatch(noUserError()) && dispatch(userName(value))
-        : dispatch(userError());
+      validation(name, value) ? noUserError() && userName(value) : userError();
     }
     if (name === "lastName") {
-      initialsValidation(value)
-        ? dispatch(noUserError()) && dispatch(userLastName(value))
-        : dispatch(userError());
+      validation(name, value)
+        ? noUserError() && userLastName(value)
+        : userError();
     }
     if (name === "email") {
-      emailValidation(value)
-        ? dispatch(noEmailError()) && dispatch(userEmail(value))
-        : dispatch(emailError());
+      validation(name, value)
+        ? noEmailError() && userEmail(value)
+        : emailError();
     }
     if (name === "password") {
-      passwordValidation(value)
-        ? dispatch(noPasswordError()) && dispatch(userPassword(value))
-        : dispatch(passwordError());
+      validation(name, value)
+        ? noPasswordError() && userPassword(value)
+        : passwordError();
     }
   };
-
   //submition of the form
   const onSubmit = e => {
     e.preventDefault();
@@ -73,7 +66,6 @@ const App = ({ formValidation }) => {
       .post("http://localhost:5000/users", user)
       .catch(error => console.log(error));
   };
-
   //check for no errors and not empty inputs if true => unable button to submit form
   const validUser =
     firstName && lastName && email && password && confirmPassword;
@@ -99,7 +91,7 @@ const App = ({ formValidation }) => {
           value={lastName}
           onChange={handleInputChange}
         />
-        {error_user && <ErrorHandler name="firstName" />}
+        {error_user && <ErrorHandler name="lastName" />}
         <Input
           name="email"
           type="email"
@@ -130,24 +122,7 @@ const App = ({ formValidation }) => {
       </form>
     );
   }
-  return <Sucess />;
-};
-//get values from store
-const mapStateToProps = ({ formValidation }) => {
-  return { formValidation };
+  return <SucessContainer />;
 };
 
-const mapDispatchToProps = {
-  userError,
-  emailError,
-  passwordError,
-  noUserError,
-  submitForm,
-  noEmailError,
-  noPasswordError,
-  userName,
-  userLastName,
-  userEmail,
-  userPassword
-};
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
