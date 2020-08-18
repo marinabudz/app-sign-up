@@ -24,3 +24,4 @@ const validation = (name, value) => {
 };
 
 export { validation };
+
