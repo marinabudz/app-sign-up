@@ -1,37 +1,8 @@
-.form {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  margin: auto;
-  align-content: space-around;
-  text-align: center;
-  font-size: 30px;
-}
-input {
-  width: 100%;
-  height: 30px;
-  margin-bottom: 30px;
-  border-bottom: 1px solid black;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  outline: none;
-  font-size: 14px;
-}
-
-button {
-  height: 60px;
-  width: 30%;
-  margin: auto;
-  font-size: 18px;
-  margin-top: 40px;
-  border: none;
-  border-radius: 40px;
-  background-color: #dd4a68;
-  color: white;
-  font-weight: bold;
-}
 body {
   padding: 0;
   margin: 0;
+}
+.buttons {
+  margin-right: auto;
+  margin-left: auto;
 }
