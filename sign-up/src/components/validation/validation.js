@@ -1,6 +1,3 @@
-import React from "react";
-import { ErrorHandler } from "../error/error";
-
 const validInputs = {
   validInitials: RegExp(/^[a-zA-Z]{3,100}/),
   validEmail: RegExp(
@@ -11,24 +8,19 @@ const validInputs = {
   )
 };
 
-const initialsValidation = value => {
-  const { validInitials } = validInputs;
-  if (value) {
-    return validInitials.test(value);
-  }
-};
-const emailValidation = value => {
-  const { validEmail } = validInputs;
-  if (value) {
-    return validEmail.test(value);
-  }
-};
-
-const passwordValidation = value => {
-  const { validPassword } = validInputs;
-  if (value) {
-    return validPassword.test(value);
+const validation = (name, value) => {
+  const { validInitials, validEmail, validPassword } = validInputs;
+  switch (name) {
+    case "firstName":
+    case "lastName":
+      return validInitials.test(value);
+    case "email":
+      return validEmail.test(value);
+    case "password":
+      return validPassword.test(value);
+    default:
+      break;
   }
 };
 
-export { initialsValidation, emailValidation, passwordValidation };
+export { validation };

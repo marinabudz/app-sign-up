@@ -43,6 +43,22 @@
       "confirmPassword": "marinaBudz1!",
       "password": "marinaBudz1!",
       "id": 4349782164
+    },
+    {
+      "firstName": "marina",
+      "lastName": "budz",
+      "email": "budz.marina@gmail.com",
+      "password": "budz.marina@gmail.com1B",
+      "confirmPassword": "budz.marina@gmail.com1B",
+      "id": 4349782165
+    },
+    {
+      "firstName": "marina",
+      "lastName": "budz",
+      "email": "marina@gmail.com",
+      "password": "marina@gmail.com1B",
+      "confirmPassword": "marina@gmail.com1B",
+      "id": 4349782166
     }
   ]
 }
